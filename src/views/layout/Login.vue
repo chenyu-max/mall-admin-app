@@ -78,7 +78,7 @@ export default {
             });
           return true;
         }
-        console.log('error submit!!');
+        window.console.log('error submit!!');
         return false;
       });
     },
