@@ -1,22 +1,71 @@
 <template>
   <div class="product-list">
     <!--  搜索  -->
-    <search @submit="searchSubmit"/>
+    <search @submit="searchSubmit" :category-list="categoryList"/>
     <!--  表格  -->
+    <productsTable :data="tableData" :page="page" @change="changePage"
+                   :category-list="categoryList"/>
   </div>
 </template>
 
 <script>
 import search from '@/components/search.vue';
+import productsTable from '@/components/productsTable.vue';
+import api from '@/api/product';
+import categoryApi from '@/api/category';
 
 export default {
   name: 'productList',
+  data() {
+    return {
+      tableData: [],
+      searchForm: {},
+      page: {
+        current: 1,
+        pageSize: 10,
+        showSizeChanger: true,
+        total: 1,
+      },
+      categoryList: [],
+      categoryObj: {},
+    };
+  },
   components: {
     search,
+    productsTable,
+  },
+  async created() {
+    // 使用await 是为了让 category 先获取到 再去获取表单的信息
+    await categoryApi.list()
+      .then((res) => {
+        this.categoryList = res.data;
+        res.data.forEach((item) => {
+          this.categoryObj[item.id] = item;
+        });
+      });
+    this.getTableData();
   },
   methods: {
     searchSubmit(form) {
-      window.console.log(form);
+      this.searchForm = form;
+    },
+    getTableData() {
+      api.list({
+        page: this.page.current,
+        size: this.page.pageSize,
+        ...this.searchForm,
+      })
+        .then((res) => {
+          this.page.total = res.total;
+          this.tableData = res.data.map((item) => ({
+            ...item,
+            categoryName: this.categoryObj[item.category].name,
+          }));
+        });
+    },
+    changePage(page) {
+      this.page = page;
+      this.getTableData();
     },
   },
 };

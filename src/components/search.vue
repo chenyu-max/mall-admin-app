@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import api from '@/api/category';
 
 export default {
   name: 'search',
@@ -41,15 +40,9 @@ export default {
         searchWord: '',
         category: '',
       },
-      categoryList: [],
     };
   },
-  created() {
-    api.list()
-      .then((res) => {
-        this.categoryList = res.data;
-      });
-  },
+  props: ['categoryList'],
   methods: {
     // 提交表单的时候出发的事件
     handleSubmit() {
