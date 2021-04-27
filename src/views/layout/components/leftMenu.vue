@@ -14,12 +14,14 @@
             <a-icon :type='route.meta.icon'/>
             <span>{{ route.meta.title }}</span>
           </span>
-          <a-menu-item v-for="childRoute in route.children" :key="childRoute.name">
-            <router-link :to="{name : childRoute.name}">
-              <a-icon :type='childRoute.meta.icon'/>
-              {{ childRoute.meta.title }}
-            </router-link>
-          </a-menu-item>
+          <template v-for="childRoute in route.children">
+            <a-menu-item :key="childRoute.name" v-if="!childRoute.meta.hidden">
+              <router-link :to="{name : childRoute.name}">
+                <a-icon :type='childRoute.meta.icon'/>
+                {{ childRoute.meta.title }}
+              </router-link>
+            </a-menu-item>
+          </template>
         </a-sub-menu>
       </template>
     </a-menu>
@@ -29,6 +31,11 @@
 <script>
 export default {
   name: 'leftMenu',
+  watch: {
+    $route(val) {
+      this.router = val;
+    },
+  },
 };
 </script>
 

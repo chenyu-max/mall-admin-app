@@ -54,6 +54,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.user-info {
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 100;
 
+  li {
+    font-weight: 700;
+  }
+}
 </style>

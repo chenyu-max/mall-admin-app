@@ -2,9 +2,9 @@
   <a-table :columns="columns" :data-source="tableData"
            :pagination="page"
            @change="changePage">
-    <div slot="operation">
-      <button>编辑</button>
-      <button>删除</button>
+    <div slot="operation" slot-scope="text,record">
+      <a-button @click="editProduct(record)">编辑</a-button>
+      <a-button @click="removeProduct(record)">删除</a-button>
     </div>
   </a-table>
 </template>
@@ -56,6 +56,7 @@ const columns = [
     title: '操作',
     dataIndex: 'operation',
     key: 'operation',
+    width: 200,
     scopedSlots: { customRender: 'operation' },
   },
 ];
@@ -77,7 +78,12 @@ export default {
   methods: {
     changePage(page) {
       this.$emit('change', page);
-      window.console.log(page);
+    },
+    editProduct(record) {
+      this.$emit('edit', record);
+    },
+    removeProduct(record) {
+      this.$emit('remove', record);
     },
   },
 };
