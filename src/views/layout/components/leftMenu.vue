@@ -1,9 +1,8 @@
 <template>
   <div class="menu-list">
     <a-menu
-      :default-selected-keys="[$router.currentRoute.matched[1] ?
-      $router.currentRoute.matched[1].name : '']"
-      :default-open-keys="[$router.currentRoute.matched[0].name]"
+      :default-selected-keys="[defaultSelectedKey]"
+      :default-open-keys="[defaultOpenKey]"
       mode="inline"
       theme="dark"
       :inline-collapsed="$store.state.collapsed"
@@ -31,6 +30,19 @@
 <script>
 export default {
   name: 'leftMenu',
+  computed: {
+    defaultSelectedKey: {
+      get() {
+        return this.$router.currentRoute.matched[1]
+          ? this.$router.currentRoute.matched[1].name : '';
+      },
+    },
+    defaultOpenKey: {
+      get() {
+        return this.$router.currentRoute.matched[0].name;
+      },
+    },
+  },
   watch: {
     $route(val) {
       this.router = val;
