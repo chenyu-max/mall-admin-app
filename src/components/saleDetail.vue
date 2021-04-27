@@ -30,7 +30,7 @@
             </div>
           </div>
         </a-upload>
-        <a-modal :visible="previewVisible" :footer="form.c_items" @cancel="handleCancel">
+        <a-modal :visible="previewVisible" :footer="form.c_item" @cancel="handleCancel">
           <img alt="example" style="width: 100%" :src="previewImage"/>
         </a-modal>
       </a-form-model-item>
@@ -63,6 +63,16 @@ export default {
     };
   },
   props: ['form'],
+  created() {
+    if (this.form.images.length > 0) {
+      this.fileList = this.form.images.map((item, index) => ({
+        uid: index,
+        name: `image-${index}`,
+        status: 'done',
+        url: item,
+      }));
+    }
+  },
   methods: {
     async handlePreview(file) {
       const obj = file;
@@ -75,7 +85,10 @@ export default {
     handleCancel() {
       this.previewVisible = false;
     },
-    handleChange({ file, fileList }) {
+    handleChange({
+      file,
+      fileList,
+    }) {
       if (file.status === 'done') {
         this.form.images.push(file.response.data.url);
       } else if (file.status === 'removed') {

@@ -14,7 +14,7 @@
             {{ c.name }}
           </a-select-option>
         </a-select>
-        <a-select v-model="form.c_items" placeholder="请添加子类目">
+        <a-select v-model="form.c_item" placeholder="请添加子类目">
           <a-select-option v-for="c in categoryItems" :key="c" :value="c">
             {{ c }}
           </a-select-option>
@@ -62,7 +62,7 @@ export default {
     changeCategory(category) {
       for (let i = 0; i < this.categoryList.length; i += 1) {
         if (this.categoryList[i].id === category) {
-          this.categoryItems = this.categoryList[i].c_items;
+          this.categoryItems = this.categoryList[i].c_item;
         }
       }
     },

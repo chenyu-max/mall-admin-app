@@ -66,10 +66,11 @@ export default {
       })
         .then((res) => {
           this.page.total = res.total;
-          this.tableData = res.data.map((item) => ({
-            ...item,
-            categoryName: this.categoryObj[item.category].name,
-          }));
+          this.tableData = res.data.filter((item) => item.category)
+            .map((item) => ({
+              ...item,
+              categoryName: this.categoryObj[item.category].name,
+            }));
         });
     },
     changePage(page) {

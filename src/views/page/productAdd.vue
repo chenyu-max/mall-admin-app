@@ -21,6 +21,13 @@ export default {
     basicDetail,
     saleDetail,
   },
+  created() {
+    const { id } = this.$route.params;
+    api.detail(id)
+      .then((res) => {
+        this.form = res;
+      });
+  },
   data() {
     return {
       current: 0,
@@ -28,7 +35,7 @@ export default {
         title: '',
         desc: '',
         category: '',
-        c_items: '',
+        c_item: '',
         tags: [],
         price: 0,
         price_off: 0,
@@ -53,14 +60,24 @@ export default {
         form,
       };
       if (this.current === 1) {
-        // 提交数据
-        api.add(this.form)
-          .then(() => {
-            this.$message.success('新增成功');
-            this.$router.push({
-              name: 'ProductList',
+        if (this.$route.params.id) {
+          api.edit(this.form)
+            .then((res) => {
+              window.console.log(res);
+              this.$message.success('修改成功');
+              this.$router.push({
+                name: 'ProductList',
+              });
             });
-          });
+        } else {
+          api.add(this.form)
+            .then(() => {
+              this.$message.success('新增成功');
+              this.$router.push({
+                name: 'ProductList',
+              });
+            });
+        }
       }
       this.current += 1;
     },
