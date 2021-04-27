@@ -1,13 +1,67 @@
 <template>
-  <div>新增商品</div>
+  <div class="product-detail">
+    <a-steps :current="current" class="product-steps">
+      <a-step v-for="item in steps" :key="item.title" :title="item.title"/>
+    </a-steps>
+    <div class="steps-content">
+      <basic-detail v-if="current === 0" @next="next"></basic-detail>
+      <saleDetail v-else-if="current === 1"></saleDetail>
+    </div>
+  </div>
 </template>
 
 <script>
+import basicDetail from '@/components/basicDetail.vue';
+import saleDetail from '@/components/saleDetail.vue';
+
 export default {
-  name: 'productAdd',
+  components: {
+    basicDetail,
+    saleDetail,
+  },
+  data() {
+    return {
+      current: 0,
+      steps: [
+        {
+          title: '填写商品基本信息',
+        },
+        {
+          title: '填写商品销售信息',
+        },
+      ],
+    };
+  },
+  methods: {
+    next(form) {
+      this.current += 1;
+      window.console.log(form);
+    },
+    prev() {
+      this.current -= 1;
+    },
+  },
 };
 </script>
+<style scoped lang="less">
+.product-detail {
+  .product-steps {
+    width: 50%;
+    margin: 20px auto;
+  }
 
-<style scoped>
+  .steps-content {
+    margin-top: 16px;
+    border: 1px dashed #e9e9e9;
+    border-radius: 6px;
+    background-color: #fafafa;
+    min-height: 200px;
+    text-align: center;
+    padding-top: 80px;
+  }
 
+  .steps-action {
+    margin-top: 24px;
+  }
+}
 </style>
