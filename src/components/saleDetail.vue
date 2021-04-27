@@ -8,10 +8,10 @@
       <a-form-model-item label="折扣价格" prop="price_off">
         <a-input v-model="form.price_off"/>
       </a-form-model-item>
-      <a-form-model-item label="商品库存" prop="inventory">
+      <a-form-model-item label="商品库存" prop="inventory" required>
         <a-input v-model="form.inventory"/>
       </a-form-model-item>
-      <a-form-model-item label="计量单位" prop="unit">
+      <a-form-model-item label="计量单位" prop="unit" required>
         <a-input v-model="form.unit"/>
       </a-form-model-item>
       <a-form-model-item label="商品相册" prop="images">
@@ -19,18 +19,18 @@
           :action="'https://mallapi.duyiedu.com/upload/images?appkey='+$store.state.user.appkey"
           list-type="picture-card"
           :file-list="fileList"
-          name="avator"
+          name="avatar"
           @preview="handlePreview"
           @change="handleChange"
         >
           <div v-if="fileList.length < 8">
             <a-icon type="plus"/>
             <div class="ant-upload-text">
-              Upload
+              上传
             </div>
           </div>
         </a-upload>
-        <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+        <a-modal :visible="previewVisible" :footer="form.c_items" @cancel="handleCancel">
           <img alt="example" style="width: 100%" :src="previewImage"/>
         </a-modal>
       </a-form-model-item>
@@ -75,11 +75,22 @@ export default {
     handleCancel() {
       this.previewVisible = false;
     },
-    handleChange({ fileList }) {
+    handleChange({ file, fileList }) {
+      if (file.status === 'done') {
+        this.form.images.push(file.response.data.url);
+      } else if (file.status === 'removed') {
+        this.form.images = this.form.images.filter((item) => item !== file.response.data.url);
+      }
       this.fileList = fileList;
     },
     next() {
-      this.$emit('next', this.form);
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          this.$emit('next', this.form);
+          return true;
+        }
+        return false;
+      });
     },
     prev() {
       this.$emit('prev');
