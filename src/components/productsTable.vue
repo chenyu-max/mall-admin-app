@@ -83,6 +83,7 @@ export default {
       this.$emit('edit', record);
     },
     removeProduct(record) {
+      window.console.log(record);
       this.$emit('remove', record);
     },
   },

@@ -20,7 +20,6 @@
     <ul class="user-info">
       <li>
         欢迎，{{ $store.state.user.username }}
-        <a-icon type="down"/>
       </li>
       <li @click="logout">退出</li>
     </ul>
@@ -59,10 +58,11 @@ export default {
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 100;
 
   li {
+    padding: 0 20px;
     font-weight: 700;
+    float: left;
   }
 }
 </style>

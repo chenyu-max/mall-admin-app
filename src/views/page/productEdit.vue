@@ -21,6 +21,13 @@ export default {
     basicDetail,
     saleDetail,
   },
+  created() {
+    const { id } = this.$route.params;
+    api.detail(id)
+      .then((res) => {
+        this.form = res;
+      });
+  },
   data() {
     return {
       current: 0,
@@ -53,9 +60,9 @@ export default {
         form,
       };
       if (this.current === 1) {
-        api.add(this.form)
+        api.edit(this.form)
           .then(() => {
-            this.$message.success('新增成功');
+            this.$message.success('修改成功');
             this.$router.push({
               name: 'ProductList',
             });

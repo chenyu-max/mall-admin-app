@@ -42,7 +42,7 @@ const asyncRouterMap = [{
       icon: 'edit',
       hidden: true,
     },
-    component: () => import('../views/page/productAdd.vue'),
+    component: () => import('../views/page/productEdit.vue'),
   }, {
     path: 'category',
     name: 'Category',
@@ -94,7 +94,10 @@ const router = new VueRouter({
 let isAddRoutes = false;
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login') {
+  // 如果没有进行过登录，直接选择进入系统，会进行判断
+  // 如果是不通过登录页面的途径 想要进入系统，需要判断 cookies中，是否具有相应的信息
+  // 如果通过登录途径进入页面，则直接进入系统
+  if (to.path !== '/login' && from.path !== '/login') {
     if (store.state.user.appkey && store.state.user.username && store.state.user.role) {
       if (!isAddRoutes) {
         const menuRoutes = getMenuRoute(store.state.user.role, asyncRouterMap);

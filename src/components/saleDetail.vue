@@ -34,7 +34,7 @@
           <img alt="example" style="width: 100%" :src="previewImage"/>
         </a-modal>
       </a-form-model-item>
-      <a-form-model-item label=" " class="next-btn">
+      <a-form-model-item label="" class="next-btn" :wrapperCol="{span:24}">
         <a-button type="default" @click="prev">上一步</a-button>
         <a-button @click="next" type="primary">提交</a-button>
       </a-form-model-item>

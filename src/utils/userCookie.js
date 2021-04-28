@@ -15,6 +15,10 @@ export function setCookie(info) {
   return true;
 }
 
+/**
+ * 获取 cookies 的user信息
+ * @returns {{role: string, appkey: string, email: string, username: string}}
+ */
 export function getUserCookie() {
   return {
     username: Cookies.get('username'),
@@ -24,6 +28,10 @@ export function getUserCookie() {
   };
 }
 
+/**
+ * 删除cookies的信息
+ * @returns {boolean}
+ */
 export function removeUserCookie() {
   Cookies.remove('username');
   Cookies.remove('appkey');
