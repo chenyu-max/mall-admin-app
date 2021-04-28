@@ -8,12 +8,15 @@
       <a-form-model-item has-feedback label="密码" prop="password">
         <a-input v-model="loginForm.password" type="password" autocomplete="off"/>
       </a-form-model-item>
-      <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }" style="text-align: center">
         <a-button type="primary" @click="submitForm('loginForm')">
           提交
         </a-button>
-        <a-button style="margin-left: 10px" @click="resetForm('loginForm')">
-          重置
+        <a-button style="margin-left: 10px">
+          <router-link :to="{name : 'FindBackPassword'}">找回密码</router-link>
+        </a-button>
+        <a-button style="margin-left: 10px" @click="toRegister">
+          注册
         </a-button>
       </a-form-model-item>
     </a-form-model>
@@ -84,6 +87,11 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    toRegister() {
+      this.$router.replace({
+        name: 'Register',
+      });
     },
   },
 };

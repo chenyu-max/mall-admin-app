@@ -74,7 +74,7 @@ const routes = [
         icon: 'number',
         hidden: false,
       },
-      component: () => import('../views/page/index.vue'),
+      component: () => import('../views/page/statistics.vue'),
     }],
   },
   {
@@ -86,6 +86,24 @@ const routes = [
     },
     component: Login,
   },
+  {
+    path: '/register',
+    name: 'Register',
+    meta: {
+      title: '注册',
+      hidden: true,
+    },
+    component: () => import('../views/layout/register.vue'),
+  },
+  {
+    path: '/findBack',
+    name: 'FindBackPassword',
+    meta: {
+      title: '找回密码',
+      hidden: true,
+    },
+    component: () => import('../views/layout/findBackPassword.vue'),
+  },
 ];
 const router = new VueRouter({
   routes,
@@ -94,23 +112,33 @@ const router = new VueRouter({
 let isAddRoutes = false;
 
 router.beforeEach((to, from, next) => {
-  // 如果没有进行过登录，直接选择进入系统，会进行判断
-  // 如果是不通过登录页面的途径 想要进入系统，需要判断 cookies中，是否具有相应的信息
-  // 如果通过登录途径进入页面，则直接进入系统
-  if (to.path !== '/login' && from.path !== '/login') {
-    if (store.state.user.appkey && store.state.user.username && store.state.user.role) {
-      if (!isAddRoutes) {
-        const menuRoutes = getMenuRoute(store.state.user.role, asyncRouterMap);
-        store.dispatch('changeMenuRoutes', routes.concat(menuRoutes))
-          .then(() => {
-            router.addRoutes(menuRoutes);
-            next();
-          });
-        isAddRoutes = true;
+  // 如果想要进入其他的路由，会进行判断
+  if (to.path !== '/login' && to.path !== '/findBack' && to.path !== '/register') {
+    // 从非登录页面进入 系统内部页面 开始进行判断
+    // 或者从非登录页面 改变路由的方式进入系统内部页面 进行判断
+    if (from.path !== '/login') {
+      if (store.state.user.appkey && store.state.user.username && store.state.user.role) {
+        if (!isAddRoutes) {
+          const menuRoutes = getMenuRoute(store.state.user.role, asyncRouterMap);
+          store.dispatch('changeMenuRoutes', routes.concat(menuRoutes))
+            .then(() => {
+              router.addRoutes(menuRoutes);
+              next();
+            });
+          isAddRoutes = true;
+        }
+        return next();
       }
-      return next();
+      return next('/login');
     }
-    return next('/login');
+    // 从登录页面进入系统页面，进行数据填写，并进入系统
+    if (from.path === '/login') {
+      const menuRoutes = getMenuRoute(store.state.user.role, asyncRouterMap);
+      store.dispatch('changeMenuRoutes', routes.concat(menuRoutes))
+        .then(() => {
+          next();
+        });
+    }
   }
   return next();
 });
