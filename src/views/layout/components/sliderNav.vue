@@ -55,7 +55,7 @@ export default {
 
 <style scoped lang="less">
 .user-info {
-  position: fixed;
+  position: absolute;
   right: 0;
   top: 0;
 

@@ -133,7 +133,7 @@ export default {
             username: this.registerForm.username,
           };
           api.register(data)
-            .then((res) => {
+            .then(() => {
               this.$router.push({
                 name: 'Login',
               });

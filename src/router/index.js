@@ -1,59 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import store from '@/store';
-import getMenuRoute from '@/utils/permission';
+// import category from '@/views/page/category.vue';
+// import category from '@/views/page/category';
 import Home from '../views/layout/Home.vue';
 import Login from '../views/layout/Login.vue';
 
 Vue.use(VueRouter);
-
-const asyncRouterMap = [{
-  path: '/product',
-  name: 'Product',
-  meta: {
-    title: '商品',
-    icon: 'inbox',
-    hidden: false,
-  },
-  component: Home,
-  children: [{
-    path: 'list',
-    name: 'ProductList',
-    meta: {
-      title: '商品列表',
-      icon: 'unordered-list',
-      hidden: false,
-    },
-    component: () => import('../views/page/productList.vue'),
-  }, {
-    path: 'add',
-    name: 'ProductAdd',
-    meta: {
-      title: '添加商品',
-      icon: 'file-add',
-      hidden: false,
-    },
-    component: () => import('../views/page/productAdd.vue'),
-  }, {
-    path: 'edit/:id',
-    name: 'ProductEdit',
-    meta: {
-      title: '编辑商品',
-      icon: 'edit',
-      hidden: true,
-    },
-    component: () => import('../views/page/productEdit.vue'),
-  }, {
-    path: 'category',
-    name: 'Category',
-    meta: {
-      title: '类目管理',
-      icon: 'project',
-      hidden: false,
-    },
-    component: () => import('../views/page/category.vue'),
-  }],
-}];
 
 const routes = [
   {
@@ -104,12 +57,50 @@ const routes = [
     },
     component: () => import('../views/layout/findBackPassword.vue'),
   },
+  {
+    path: '/product',
+    name: 'Product',
+    meta: {
+      title: '商品',
+      icon: 'inbox',
+      hidden: false,
+    },
+    component: Home,
+    children: [{
+      path: 'list',
+      name: 'ProductList',
+      meta: {
+        title: '商品列表',
+        icon: 'unordered-list',
+        hidden: false,
+      },
+      component: () => import('../views/page/productList.vue'),
+    }, {
+      path: 'add',
+      name: 'ProductAdd',
+      meta: {
+        title: '添加商品',
+        icon: 'file-add',
+        hidden: false,
+      },
+      component: () => import('../views/page/productAdd.vue'),
+    }, {
+      path: 'edit/:id',
+      name: 'ProductEdit',
+      meta: {
+        title: '编辑商品',
+        icon: 'edit',
+        hidden: true,
+      },
+      component: () => import('../views/page/productEdit.vue'),
+    }],
+  },
 ];
 const router = new VueRouter({
   routes,
 });
 
-let isAddRoutes = false;
+// let isAddRoutes = false;
 
 router.beforeEach((to, from, next) => {
   // 如果想要进入其他的路由，会进行判断
@@ -118,26 +109,18 @@ router.beforeEach((to, from, next) => {
     // 或者从非登录页面 改变路由的方式进入系统内部页面 进行判断
     if (from.path !== '/login') {
       if (store.state.user.appkey && store.state.user.username && store.state.user.role) {
-        if (!isAddRoutes) {
-          const menuRoutes = getMenuRoute(store.state.user.role, asyncRouterMap);
-          store.dispatch('changeMenuRoutes', routes.concat(menuRoutes))
-            .then(() => {
-              router.addRoutes(menuRoutes);
-              next();
-            });
-          isAddRoutes = true;
-        }
+        store.dispatch('changeMenuRoutes', routes)
+          .then(() => {
+            next();
+          });
         return next();
       }
       return next('/login');
     }
     // 从登录页面进入系统页面，进行数据填写，并进入系统
     if (from.path === '/login') {
-      const menuRoutes = getMenuRoute(store.state.user.role, asyncRouterMap);
-      store.dispatch('changeMenuRoutes', routes.concat(menuRoutes))
-        .then(() => {
-          next();
-        });
+      store.dispatch('changeMenuRoutes', routes);
+      next();
     }
   }
   return next();
