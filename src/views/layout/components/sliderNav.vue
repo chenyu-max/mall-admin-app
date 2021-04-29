@@ -19,7 +19,18 @@
     </div>
     <ul class="user-info">
       <li>
-        欢迎，{{ $store.state.user.username }}
+        <ul>
+          <li @click="changeShow">
+            欢迎，{{ $store.state.user.username }}
+            <a-icon :type="isShow ? 'up' : 'down' "></a-icon>
+          </li>
+          <li :class="{show:isShow === true, hidden : isShow === false}">
+            <DialogBox :name="'changePassword'"></DialogBox>
+          </li>
+          <li :class="{show:isShow === true, hidden : isShow === false}">
+            <DialogBox :name="'changeUserInfo'"></DialogBox>
+          </li>
+        </ul>
       </li>
       <li @click="logout">退出</li>
     </ul>
@@ -27,11 +38,17 @@
 </template>
 
 <script>
+import DialogBox from '@/components/DialogBox/index.vue';
+
 export default {
   name: 'sliderNav',
+  components: {
+    DialogBox,
+  },
   data() {
     return {
       currentRoutes: this.$router.currentRoute.matched,
+      isShow: false,
     };
   },
   watch: {
@@ -49,6 +66,9 @@ export default {
         name: 'Login',
       });
     },
+    changeShow() {
+      this.isShow = !this.isShow;
+    },
   },
 };
 </script>
@@ -58,11 +78,34 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
+  z-index: 100;
 
-  li {
+  > li {
     padding: 0 20px;
     font-weight: 700;
     float: left;
+
+    ul {
+      li {
+        width: 150px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+      }
+
+      .show {
+        display: block;
+        background-color: #fff;
+
+        &:hover {
+          background-color: #30A6C6;
+        }
+      }
+
+      .hidden {
+        display: none;
+      }
+    }
   }
 }
 </style>

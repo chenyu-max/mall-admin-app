@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import store from '@/store';
-// import category from '@/views/page/category.vue';
-// import category from '@/views/page/category';
 import Home from '../views/layout/Home.vue';
 import Login from '../views/layout/Login.vue';
 
@@ -93,14 +91,21 @@ const routes = [
         hidden: true,
       },
       component: () => import('../views/page/productEdit.vue'),
+    }, {
+      path: 'category',
+      name: 'Category',
+      meta: {
+        title: '类目管理',
+        icon: 'project',
+        hidden: false,
+      },
+      component: () => import('../views/page/category.vue'),
     }],
   },
 ];
 const router = new VueRouter({
   routes,
 });
-
-// let isAddRoutes = false;
 
 router.beforeEach((to, from, next) => {
   // 如果想要进入其他的路由，会进行判断
@@ -119,8 +124,10 @@ router.beforeEach((to, from, next) => {
     }
     // 从登录页面进入系统页面，进行数据填写，并进入系统
     if (from.path === '/login') {
-      store.dispatch('changeMenuRoutes', routes);
-      next();
+      store.dispatch('changeMenuRoutes', routes)
+        .then(() => {
+          next();
+        });
     }
   }
   return next();
