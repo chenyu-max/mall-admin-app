@@ -25,10 +25,10 @@
             <a-icon :type="isShow ? 'up' : 'down' "></a-icon>
           </li>
           <li :class="{show:isShow === true, hidden : isShow === false}">
-            <DialogBox :name="'changePassword'"></DialogBox>
+            <DialogBox :name="'changePassword'" @over="changeShow"></DialogBox>
           </li>
           <li :class="{show:isShow === true, hidden : isShow === false}">
-            <DialogBox :name="'changeUserInfo'"></DialogBox>
+            <DialogBox :name="'changeUserInfo'" @over="changeShow"></DialogBox>
           </li>
         </ul>
       </li>

@@ -139,6 +139,13 @@ export default {
                       });
                     }
                   });
+                  if (this.$store.state.user.role !== 'admin') {
+                    if (this.$route.name === 'Category') {
+                      this.$router.replace({
+                        name: 'Index',
+                      });
+                    }
+                  }
                 });
               this.$emit('over');
             })

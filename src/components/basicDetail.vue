@@ -55,7 +55,6 @@ export default {
   created() {
     categoryApi.list()
       .then((res) => {
-        window.console.log(res);
         this.categoryList = res.data;
       });
   },

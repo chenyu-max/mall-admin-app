@@ -25,7 +25,7 @@ const routes = [
         icon: 'number',
         hidden: false,
       },
-      component: () => import('../views/page/statistics.vue'),
+      component: () => import(/* webpackChunkName: "index" */ '../views/page/statistics.vue'),
     }],
   },
   {
@@ -44,7 +44,7 @@ const routes = [
       title: '注册',
       hidden: true,
     },
-    component: () => import('../views/layout/register.vue'),
+    component: () => import(/* webpackChunkName: "index" */ '../views/layout/register.vue'),
   },
   {
     path: '/findBack',
@@ -53,7 +53,7 @@ const routes = [
       title: '找回密码',
       hidden: true,
     },
-    component: () => import('../views/layout/findBackPassword.vue'),
+    component: () => import(/* webpackChunkName: "index" */ '../views/layout/findBackPassword.vue'),
   },
   {
     path: '/product',
@@ -72,7 +72,7 @@ const routes = [
         icon: 'unordered-list',
         hidden: false,
       },
-      component: () => import('../views/page/productList.vue'),
+      component: () => import(/* webpackChunkName: "index" */ '../views/page/productList.vue'),
     }, {
       path: 'add',
       name: 'ProductAdd',
@@ -81,7 +81,7 @@ const routes = [
         icon: 'file-add',
         hidden: false,
       },
-      component: () => import('../views/page/productAdd.vue'),
+      component: () => import(/* webpackChunkName: "index" */ '../views/page/productAdd.vue'),
     }, {
       path: 'edit/:id',
       name: 'ProductEdit',
@@ -90,7 +90,7 @@ const routes = [
         icon: 'edit',
         hidden: true,
       },
-      component: () => import('../views/page/productEdit.vue'),
+      component: () => import(/* webpackChunkName: "index" */ '../views/page/productEdit.vue'),
     }, {
       path: 'category',
       name: 'Category',
@@ -99,7 +99,7 @@ const routes = [
         icon: 'project',
         hidden: false,
       },
-      component: () => import('../views/page/category.vue'),
+      component: () => import(/* webpackChunkName: "index" */ '../views/page/category.vue'),
     }],
   },
 ];
@@ -114,6 +114,10 @@ router.beforeEach((to, from, next) => {
     // 或者从非登录页面 改变路由的方式进入系统内部页面 进行判断
     if (from.path !== '/login') {
       if (store.state.user.appkey && store.state.user.username && store.state.user.role) {
+        if (store.state.user.role !== 'admin' && to.path === '/product/category') {
+          return next('/index');
+        }
+
         store.dispatch('changeMenuRoutes', routes)
           .then(() => {
             next();

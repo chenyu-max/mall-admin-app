@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <a-button type="primary" @click="showModal">
-      {{ name === 'changePassword' ? '修改密码' : '修改用户信息' }}
+    <a-button @click="showModal">
+      {{ '修改类目' }}
     </a-button>
     <a-modal
-      :title="name === 'changePassword' ? '修改密码' : '修改用户信息'"
+      title="修改类目"
       :visible="visible"
       :confirm-loading="confirmLoading"
       :mask="true"
@@ -14,23 +14,20 @@
       footer=""
       @cancel="handleCancel"
     >
-      <changePassword v-if="name === 'changePassword'" @over="handleOk"></changePassword>
-      <changeUserInfo v-else @over="handleOk"></changeUserInfo>
+      <editCategory :category="category" @over="handleOk"></editCategory>
     </a-modal>
   </div>
 </template>
 
 <script>
-import changePassword from './components/changePassword.vue';
-import changeUserInfo from './components/changeUserInfo.vue';
+import editCategory from './editCategory.vue';
 
 export default {
   name: 'index.vue',
   components: {
-    changePassword,
-    changeUserInfo,
+    editCategory,
   },
-  props: ['name'],
+  props: ['category'],
   data() {
     return {
       visible: false,
@@ -44,9 +41,9 @@ export default {
     handleOk() {
       this.confirmLoading = true;
       setTimeout(() => {
+        this.$emit('over');
         this.visible = false;
         this.confirmLoading = false;
-        this.$emit('over');
       }, 500);
     },
     handleCancel() {
